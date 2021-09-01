@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Задачи</title>
+
+</head>
+<body>
+
+    <form action="" method="post">
+            <label form="input_form">Новое задание</label>
+            <input type="text" name="input_form">
+            <input type="submit">
+    </form>
+
+    <table style="margin-top: 10px">
+        <tr>
+            <td>
+                <form action="/tasks?status=completed" method="POST">
+                    {% if which_list == task_states.COMPLETED %}
+                        <input width="100" type="submit" disabled value="Показать выполненные">
+                    {% else %}
+                        <input width="100" type="submit" value="Показать выполненные">
+                    {% endif %}
+
+                </form>
+            </td>
+
+            <td>
+                <form action="/tasks?status=unfinished" method="POST">
+                    {% if which_list == task_states.UNFINISHED %}
+                        <input width="100" type="submit" disabled value="Показать невыполненные">
+                    {% else %}
+                        <input width="100" type="submit" value="Показать невыполненные">
+                    {% endif %}
+                </form>
+            </td>
+
+            <td>
+                <form action="/tasks?status=all" method="POST">
+                    {% if which_list == task_states.ALL %}
+                        <input width="100" type="submit" disabled value="Показать все">
+                    {% else %}
+                        <input width="100" type="submit" value="Показать все">
+                    {% endif %}
+
+                </form>
+            </td>
+        </tr>
+    </table>
+
+
+    <h1 style="margin-top: 50px">Список заданий</h1>
+
+
+    <table style="word-break: break-all" border="1">
+        <tr>
+            <td style="text-align: center; width: 600px">Задание</td>
+            <td style="text-align: center; width: 100px">Статус</td>
+
+       </tr>
+        {% for key, value in tableDict.items() %}
+            <tr>
+                {% if (which_list == task_states.ALL or value.status == which_list) %}
+                    <td> {{ value.value }} </td><td align="center">
+
+                        <form action="/process_data/" method="POST">
+                            <input type="hidden" name="index" value="{{ key }}">
+
+                            {% if value.status == task_states.UNFINISHED %}
+                                <input name="button_submit" type="submit" value="Выполнить">
+                            {% else %}
+                                <input name="button_submit" type="submit" disabled value="Выполнено">
+                            {% endif %}
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
+
+</body>
+</html>
